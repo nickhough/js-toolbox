@@ -7,10 +7,13 @@ export default class Model {
   constructor(config = {}) {
 
     const {
-      _fields,
       _excluded,
+      _fields,
+      _settings,
       ...rest
     } = config;
+
+    this._settings = _settings;
 
     this._data = rest || {};
 
@@ -23,8 +26,6 @@ export default class Model {
     this.setValues();
 
     this.checkRequiredFields();
-
-    this.setBreadcrumbTitle();
 
     this.removeExcludedFields();
   }
@@ -39,6 +40,9 @@ export default class Model {
 
   setFields(fields = {}) {
     this._fields = {
+      id: {
+        type: Number,
+      },
       createdAt: {
         type: moment,
       },
@@ -60,6 +64,7 @@ export default class Model {
       '_relationships',
       '_type',
       '_fields',
+      '_settings',
       ...excluded,
     ];
   }
@@ -133,7 +138,7 @@ export default class Model {
         // Moment or JS Date
         else if (field.type === moment || field.type === Date) {
 
-          let timezone = this._data.userTimezone || this._data.defaultTimezone || 'UTC';
+          let timezone = this._settings.timezone || 'UTC';
 
           if (moment(value).isValid()) {
             this[key] = moment(value).tz(timezone);
@@ -171,6 +176,10 @@ export default class Model {
   }
 
   checkRequiredFields() {
+    if (!this._settings.debug) {
+      return;
+    }
+
     for (let [key, value] of Object.entries(this._fields)) {
       if (value.required && this._data[key] === undefined) {
         console.error(`Missing required field: ${key}`);
@@ -178,13 +187,11 @@ export default class Model {
     }
   }
 
-  setBreadcrumbTitle() {
-    if (!this.breadcrumbTitle) {
-      this.breadcrumbTitle = this.name || this.fullName || this.title || 'No Title Set';
-    }
-  }
-
   removeExcludedFields() {
+    if (this._settings.debug) {
+      return;
+    }
+
     const excluded = this._excluded;
     for (let [key, value] of Object.entries(this)) {
       if (excluded.indexOf(key) !== -1) {
