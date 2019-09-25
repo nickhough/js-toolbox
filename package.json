@@ -1,0 +1,30 @@
+{
+  "name": "@nickhough/js-toolbox",
+  "version": "2.0.0",
+  "description": "A collection of useful JS classes",
+  "main": "lib/index.js",
+  "scripts": {
+    "prepublish": "node_modules/.bin/babel src --out-dir lib",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nickhough/js-toolbox.git"
+  },
+  "author": "Nick Hough",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nickhough/js-toolbox/issues"
+  },
+  "homepage": "https://github.com/nickhough/js-toolbox#readme",
+  "dependencies": {
+    "lodash": "^4.17.11",
+    "moment": "^2.24.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.3.4",
+    "@babel/preset-env": "^7.3.4"
+  }
+}
